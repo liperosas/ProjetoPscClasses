@@ -8,10 +8,12 @@ import classes.Endereco;
 import classes.Funcionario;
 import fachada.IFachada;
 import fachada.Fachada;
+import java.awt.Component;
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 
 /**
  *
@@ -39,6 +41,7 @@ public class CRUDFuncionario extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jMenuItem3 = new javax.swing.JMenuItem();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -67,7 +70,7 @@ public class CRUDFuncionario extends javax.swing.JFrame {
         textCEPFuncionario = new javax.swing.JFormattedTextField();
         textComplementoFuncionario = new javax.swing.JTextField();
         buttonSalvarFuncionario = new javax.swing.JButton();
-        buttonLimparFuncionario = new javax.swing.JButton();
+        buttonCancelarFuncionario = new javax.swing.JButton();
         jLabel14 = new javax.swing.JLabel();
         textCTPSFuncionario = new javax.swing.JTextField();
         jLabel15 = new javax.swing.JLabel();
@@ -101,9 +104,12 @@ public class CRUDFuncionario extends javax.swing.JFrame {
         jMenuItem19 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem8 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenu5 = new javax.swing.JMenu();
         jMenuItem20 = new javax.swing.JMenuItem();
+
+        jMenuItem3.setText("jMenuItem3");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -177,7 +183,12 @@ public class CRUDFuncionario extends javax.swing.JFrame {
             }
         });
 
-        buttonLimparFuncionario.setText("Limpar");
+        buttonCancelarFuncionario.setText("Cancelar");
+        buttonCancelarFuncionario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonCancelarFuncionarioActionPerformed(evt);
+            }
+        });
 
         jLabel14.setText("CTPS");
 
@@ -375,7 +386,7 @@ public class CRUDFuncionario extends javax.swing.JFrame {
 
         jMenu2.setText("Opcoes");
 
-        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_H, 0));
+        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_H, java.awt.event.InputEvent.CTRL_MASK));
         jMenuItem1.setText("Home");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -383,6 +394,15 @@ public class CRUDFuncionario extends javax.swing.JFrame {
             }
         });
         jMenu2.add(jMenuItem1);
+
+        jMenuItem8.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_L, java.awt.event.InputEvent.SHIFT_MASK));
+        jMenuItem8.setText("Limpar");
+        jMenuItem8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem8ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem8);
 
         jMenuItem2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, java.awt.event.InputEvent.ALT_MASK));
         jMenuItem2.setText("Sair");
@@ -454,7 +474,7 @@ public class CRUDFuncionario extends javax.swing.JFrame {
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(textComplementoFuncionario)
                                             .addGroup(layout.createSequentialGroup()
-                                                .addComponent(buttonLimparFuncionario, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(buttonCancelarFuncionario, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                 .addComponent(buttonSalvarFuncionario, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addGap(0, 0, Short.MAX_VALUE))))))
@@ -563,7 +583,7 @@ public class CRUDFuncionario extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(buttonSalvarFuncionario)
-                    .addComponent(buttonLimparFuncionario))
+                    .addComponent(buttonCancelarFuncionario))
                 .addContainerGap())
         );
 
@@ -733,6 +753,28 @@ public class CRUDFuncionario extends javax.swing.JFrame {
             + "Para adequar-se ao uso da ferramenta oferecemos o treinamento necessário\n.Dúvidas ligue para fone:Telefone de Antônio ");
     }//GEN-LAST:event_jMenuItem20ActionPerformed
 
+    private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
+        // TODO add your handling code here:
+         for (int i=0; i < getContentPane().getComponentCount(); i++) {  
+                     
+  
+                    Component c = getContentPane().getComponent(i);  
+  
+                    if (c instanceof JTextField) {  
+                        
+                        JTextField field = (JTextField) c;  
+                        field.setText("");  
+                         
+                    }  
+                }  
+
+    }//GEN-LAST:event_jMenuItem8ActionPerformed
+
+    private void buttonCancelarFuncionarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonCancelarFuncionarioActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_buttonCancelarFuncionarioActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -768,7 +810,7 @@ public class CRUDFuncionario extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton buttonLimparFuncionario;
+    private javax.swing.JButton buttonCancelarFuncionario;
     private javax.swing.JButton buttonSalvarFuncionario;
     private javax.swing.JComboBox comboUFFuncionario;
     private javax.swing.JLabel jLabel1;
@@ -811,10 +853,12 @@ public class CRUDFuncionario extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem20;
     private javax.swing.JMenuItem jMenuItem24;
+    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JMenuItem jMenuItem7;
+    private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JMenuItem jMenuItem9;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;

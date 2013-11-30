@@ -8,10 +8,12 @@ import classes.Elaborador;
 import classes.Endereco;
 import fachada.Fachada;
 import fachada.IFachada;
+import java.awt.Component;
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 
 /**
  *
@@ -42,7 +44,7 @@ public class CRUDElaborador extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        buttonLimparElaborador = new javax.swing.JButton();
+        buttonCancelarElaborador = new javax.swing.JButton();
         buttonSalvarElaborador = new javax.swing.JButton();
         textComplementoElaborador = new javax.swing.JTextField();
         textNomeElaborador = new javax.swing.JTextField();
@@ -101,16 +103,17 @@ public class CRUDElaborador extends javax.swing.JFrame {
         jMenuItem19 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenu5 = new javax.swing.JMenu();
         jMenuItem20 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        buttonLimparElaborador.setText("Limpar");
-        buttonLimparElaborador.addActionListener(new java.awt.event.ActionListener() {
+        buttonCancelarElaborador.setText("Cancelar");
+        buttonCancelarElaborador.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonLimparElaboradorActionPerformed(evt);
+                buttonCancelarElaboradorActionPerformed(evt);
             }
         });
 
@@ -371,7 +374,7 @@ public class CRUDElaborador extends javax.swing.JFrame {
 
         jMenu2.setText("Opcoes");
 
-        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_H, 0));
+        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_H, java.awt.event.InputEvent.CTRL_MASK));
         jMenuItem1.setText("Home");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -379,6 +382,15 @@ public class CRUDElaborador extends javax.swing.JFrame {
             }
         });
         jMenu2.add(jMenuItem1);
+
+        jMenuItem3.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_L, java.awt.event.InputEvent.SHIFT_MASK));
+        jMenuItem3.setText("Limpar");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem3);
 
         jMenuItem2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, java.awt.event.InputEvent.ALT_MASK));
         jMenuItem2.setText("Sair");
@@ -478,7 +490,7 @@ public class CRUDElaborador extends javax.swing.JFrame {
                         .addComponent(textCEPElaborador, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(286, 286, 286)
-                        .addComponent(buttonLimparElaborador, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(buttonCancelarElaborador, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(6, 6, 6)
                         .addComponent(buttonSalvarElaborador, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -554,7 +566,7 @@ public class CRUDElaborador extends javax.swing.JFrame {
                     .addComponent(textCEPElaborador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(11, 11, 11)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(buttonLimparElaborador)
+                    .addComponent(buttonCancelarElaborador)
                     .addComponent(buttonSalvarElaborador))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -608,10 +620,10 @@ public class CRUDElaborador extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_textCEPElaboradorActionPerformed
 
-    private void buttonLimparElaboradorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonLimparElaboradorActionPerformed
+    private void buttonCancelarElaboradorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonCancelarElaboradorActionPerformed
         // TODO add your handling code here:
-        
-    }//GEN-LAST:event_buttonLimparElaboradorActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_buttonCancelarElaboradorActionPerformed
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
         // TODO add your handling code here:
@@ -721,6 +733,23 @@ public class CRUDElaborador extends javax.swing.JFrame {
             + "Para adequar-se ao uso da ferramenta oferecemos o treinamento necessário\n.Dúvidas ligue para fone:Telefone de Antônio ");
     }//GEN-LAST:event_jMenuItem20ActionPerformed
 
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        // TODO add your handling code here:
+         for (int i=0; i < getContentPane().getComponentCount(); i++) {  
+                    
+  
+                    Component c = getContentPane().getComponent(i);  
+  
+                    if (c instanceof JTextField) {  
+                        
+                        JTextField field = (JTextField) c;  
+                        field.setText("");  
+                         
+                    }  
+                }  
+
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -757,7 +786,7 @@ public class CRUDElaborador extends javax.swing.JFrame {
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox ComboFormacaoElaborador;
-    private javax.swing.JButton buttonLimparElaborador;
+    private javax.swing.JButton buttonCancelarElaborador;
     private javax.swing.JButton buttonSalvarElaborador;
     private javax.swing.JComboBox comboUFElaborador;
     private javax.swing.JLabel jLabel1;
@@ -799,6 +828,7 @@ public class CRUDElaborador extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem20;
     private javax.swing.JMenuItem jMenuItem24;
+    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;

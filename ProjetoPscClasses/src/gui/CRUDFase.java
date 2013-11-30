@@ -31,30 +31,23 @@ public class CRUDFase extends javax.swing.JFrame {
     DefaultTableModel modelo = new DefaultTableModel();
     Fachada fachada = Fachada.obterInstancia();
     CRUDAreaConcurso crudac;
-   ArrayList<DiaFase> dias_fase = new ArrayList<DiaFase>();
+    ArrayList<DiaFase> dias_fase = new ArrayList<DiaFase>();
+    boolean alterar = false;
+    int posicao = 0;
 
     public CRUDFase(CRUDAreaConcurso crudac) {
-        try {
-            initComponents();
-            this.crudac = crudac;
-            ArrayList<DiaFase> dias_fase;
-              DiaFase diaFase = new DiaFase();
-            Date data = new Date("12/11/2012");
-            diaFase.getDataDia().setTime(data);
-            SimpleDateFormat df = new SimpleDateFormat("HH:mm");
-            diaFase.getHoraInicial().setTime(df.parse("12:00"));
-            diaFase.getHoraFinal().setTime(df.parse("14:30"));
-//            DiaFase diaFase2 = new DiaFase();
-//            Date data2 = new Date("12/12/2012");
-//            diaFase2.getDataDia().setTime(data2);
-//            diaFase2.getHoraInicial().setTime(df.parse("13:00"));
-//            diaFase2.getHoraFinal().setTime(df.parse("17:30"));
-//            fase.getDiaFase().add(diaFase);
-//            fase.getDiaFase().add(diaFase2);
-            this.atualizarListaDiaFase();
-        } catch (ParseException ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage());
-        }
+        initComponents();
+        this.crudac = crudac;
+        this.atualizarListaDiaFase();
+    }
+
+    public CRUDFase(CRUDAreaConcurso crudac, Fase fase, int posicao) {
+        initComponents();
+        this.crudac = crudac;
+        this.fase = fase;
+        this.alterar = true;
+        this.posicao = posicao;
+        this.atualizarListaDiaFase();
     }
 
     private CRUDFase() {
@@ -81,13 +74,12 @@ public class CRUDFase extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        ButtonLimparFase = new javax.swing.JButton();
+        ButtonCancelarFase = new javax.swing.JButton();
         ButtonSalvarFase = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         TableListarDiaFase = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
         jMenuBar3 = new javax.swing.JMenuBar();
         jMenu5 = new javax.swing.JMenu();
         jMenu6 = new javax.swing.JMenu();
@@ -124,7 +116,12 @@ public class CRUDFase extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        ButtonLimparFase.setText("Limpar");
+        ButtonCancelarFase.setText("Cancelar");
+        ButtonCancelarFase.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ButtonCancelarFaseActionPerformed(evt);
+            }
+        });
 
         ButtonSalvarFase.setText("Salvar");
         ButtonSalvarFase.addActionListener(new java.awt.event.ActionListener() {
@@ -158,13 +155,6 @@ public class CRUDFase extends javax.swing.JFrame {
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
-            }
-        });
-
-        jButton3.setText("Alterar Dia da Fase");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
             }
         });
 
@@ -360,7 +350,7 @@ public class CRUDFase extends javax.swing.JFrame {
 
         jMenu13.setText("Opcoes");
 
-        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_H, 0));
+        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_H, java.awt.event.InputEvent.CTRL_MASK));
         jMenuItem1.setText("Home");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -409,17 +399,15 @@ public class CRUDFase extends javax.swing.JFrame {
                         .addGap(10, 10, 10)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jButton1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton3)
-                                .addContainerGap(25, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(ButtonLimparFase)
+                                .addComponent(ButtonCancelarFase)
                                 .addGap(27, 27, 27)
                                 .addComponent(ButtonSalvarFase)
-                                .addGap(144, 144, 144))))))
+                                .addGap(144, 144, 144))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jButton1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 141, Short.MAX_VALUE)
+                                .addComponent(jButton2)
+                                .addGap(21, 21, 21))))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -429,11 +417,10 @@ public class CRUDFase extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3))
+                    .addComponent(jButton2))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(ButtonLimparFase)
+                    .addComponent(ButtonCancelarFase)
                     .addComponent(ButtonSalvarFase))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -449,18 +436,23 @@ public class CRUDFase extends javax.swing.JFrame {
 
     private void ButtonSalvarFaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonSalvarFaseActionPerformed
         try {
-            
-            
-            
             // TODO add your handling code here:
-            for (DiaFase df : fase.getDiasFase()) {
-                df.setFase(fase);
+            if (alterar) {
+               for (DiaFase df : fase.getDiasFase()) {
+                    df.setFase(fase);
+                }
+                crudac.fases.get(posicao).setDiasFase(fase.getDiasFase());
+                crudac.carregarListaFases();
+                JOptionPane.showMessageDialog(this, "Fase Alterada com sucesso");
+            } else {
+                for (DiaFase df : fase.getDiasFase()) {
+                    df.setFase(fase);
+                }
+                crudac.fases.add(fase);
+                crudac.carregarListaFases();
+                JOptionPane.showMessageDialog(this, "Fase Cadastrada com sucesso");
             }
-            crudac.fases.add(fase);
-            crudac.carregarListaFases();
-            this.dispose();
-            JOptionPane.showMessageDialog(this, "Fase Cadastrada com sucesso");
-            this.dispose();
+                this.dispose();            
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage());
         }
@@ -469,21 +461,22 @@ public class CRUDFase extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
 
-      try{
-      if(TableListarDiaFase.getSelectedRow()!=-1){
-          fase.getDiasFase().remove(TableListarDiaFase.getSelectedRow());
-          atualizarListaDiaFase();
-      JOptionPane.showMessageDialog(rootPane, "Dia Fase removido com sucesso");
-      } else{
-      JOptionPane.showMessageDialog(rootPane,"Selecione Dia Fase para remover");
-      }
-      
-       
-    
+        try {
+            if (TableListarDiaFase.getSelectedRow() != -1) {
+                fase.getDiasFase().remove(TableListarDiaFase.getSelectedRow());
+                atualizarListaDiaFase();
+                JOptionPane.showMessageDialog(rootPane, "Dia Fase removido com sucesso");
+            } else {
+                JOptionPane.showMessageDialog(rootPane, "Selecione Dia Fase para remover");
+            }
+
+
+
 
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage());}
-    //    }
+            JOptionPane.showMessageDialog(this, ex.getMessage());
+        }
+        //    }
 //        DiaFase diaFase = new DiaFase();
 //        if (TableListarDiaFase.getSelectedRow() >= 0){  
 //            modelo.removeRow(TableListarDiaFase.getSelectedRow());  
@@ -496,116 +489,107 @@ public class CRUDFase extends javax.swing.JFrame {
 //            JOptionPane.showMessageDialog(null, "Favor selecionar uma linha");  
 //        }  
     }//GEN-LAST:event_jButton2ActionPerformed
+    
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
-      if(TableListarDiaFase.getSelectedRow()==-1){
-      JOptionPane.showMessageDialog(rootPane,"Selecione Dia Fase para alterar");
-      }else{
-        int codigo= TableListarDiaFase.getSelectedRow();
-        AlterarDiaFase altDiaFase= new AlterarDiaFase(this, codigo);
-        altDiaFase.setVisible(true);
-    }//GEN-LAST:event_jButton3ActionPerformed
-    }
     private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
         // TODO add your handling code here:
-        CRUDProva crudP= new CRUDProva();
+        CRUDProva crudP = new CRUDProva();
         crudP.setVisible(true);
     }//GEN-LAST:event_jMenuItem6ActionPerformed
 
     private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
         // TODO add your handling code here:
-        ListarProva ltsP= new ListarProva();
+        ListarProva ltsP = new ListarProva();
         ltsP.setVisible(true);
     }//GEN-LAST:event_jMenuItem7ActionPerformed
 
     private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
         // TODO add your handling code here:
-        CRUDConcurso crudC= new CRUDConcurso(null);
+        CRUDConcurso crudC = new CRUDConcurso(null);
         crudC.setVisible(true);
     }//GEN-LAST:event_jMenuItem8ActionPerformed
 
     private void jMenuItem9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem9ActionPerformed
         // TODO add your handling code here:
-        ListarConcurso lstC= new ListarConcurso();
+        ListarConcurso lstC = new ListarConcurso();
         lstC.setVisible(true);
     }//GEN-LAST:event_jMenuItem9ActionPerformed
 
     private void jMenuItem10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem10ActionPerformed
         // TODO add your handling code here:
-        CRUDQuestao crudQ= new CRUDQuestao(null);
+        CRUDQuestao crudQ = new CRUDQuestao(null);
         crudQ.setVisible(true);
     }//GEN-LAST:event_jMenuItem10ActionPerformed
 
     private void jMenuItem24ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem24ActionPerformed
         // TODO add your handling code here:
-        ListarQuestao listarq= new ListarQuestao();
+        ListarQuestao listarq = new ListarQuestao();
         listarq.setVisible(true);
     }//GEN-LAST:event_jMenuItem24ActionPerformed
 
     private void jMenuItem11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem11ActionPerformed
         // TODO add your handling code here:
-        CRUDGenero crudG= new CRUDGenero(null);
+        CRUDGenero crudG = new CRUDGenero(null);
         crudG.setVisible(true);
     }//GEN-LAST:event_jMenuItem11ActionPerformed
 
     private void jMenuItem12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem12ActionPerformed
         // TODO add your handling code here:
-        ListarGenero lstG= new ListarGenero();
+        ListarGenero lstG = new ListarGenero();
         lstG.setVisible(true);
     }//GEN-LAST:event_jMenuItem12ActionPerformed
 
     private void jMenuItem13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem13ActionPerformed
         // TODO add your handling code here:
-        CRUDLocal crudL= new CRUDLocal(null);
+        CRUDLocal crudL = new CRUDLocal(null);
         crudL.setVisible(true);
     }//GEN-LAST:event_jMenuItem13ActionPerformed
 
     private void jMenuItem14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem14ActionPerformed
         // TODO add your handling code here:
-        ListarLocal lst= new ListarLocal();
+        ListarLocal lst = new ListarLocal();
         lst.setVisible(true);
     }//GEN-LAST:event_jMenuItem14ActionPerformed
 
     private void jMenuItem15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem15ActionPerformed
         // TODO add your handling code here:
-        CRUDEmpresa crudE= new CRUDEmpresa(null);
+        CRUDEmpresa crudE = new CRUDEmpresa(null);
         crudE.setVisible(true);
     }//GEN-LAST:event_jMenuItem15ActionPerformed
 
     private void jMenuItem16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem16ActionPerformed
         // TODO add your handling code here:
-        ListarEmpresa lstE= new ListarEmpresa();
+        ListarEmpresa lstE = new ListarEmpresa();
         lstE.setVisible(true);
     }//GEN-LAST:event_jMenuItem16ActionPerformed
 
     private void jMenuItem17ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem17ActionPerformed
         // TODO add your handling code here:
-        CRUDElaborador el= new CRUDElaborador(null);
+        CRUDElaborador el = new CRUDElaborador(null);
         el.setVisible(true);
     }//GEN-LAST:event_jMenuItem17ActionPerformed
 
     private void jMenuItem18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem18ActionPerformed
         // TODO add your handling code here:
-        ListarElaborador lstEl= new ListarElaborador();
+        ListarElaborador lstEl = new ListarElaborador();
         lstEl.setVisible(true);
     }//GEN-LAST:event_jMenuItem18ActionPerformed
 
     private void jMenuItem19ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem19ActionPerformed
         // TODO add your handling code here:
-        CRUDFuncionario crudF= new CRUDFuncionario(null);
+        CRUDFuncionario crudF = new CRUDFuncionario(null);
         crudF.setVisible(true);
     }//GEN-LAST:event_jMenuItem19ActionPerformed
 
     private void jMenuItem20ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem20ActionPerformed
         // TODO add your handling code here:
-        ListarFuncionario lstF= new ListarFuncionario();
+        ListarFuncionario lstF = new ListarFuncionario();
         lstF.setVisible(true);
     }//GEN-LAST:event_jMenuItem20ActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         // TODO add your handling code here:
-        TelaInicial tl= new TelaInicial();
+        TelaInicial tl = new TelaInicial();
         tl.setVisible(true);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
@@ -616,10 +600,16 @@ public class CRUDFase extends javax.swing.JFrame {
 
     private void jMenuItem21ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem21ActionPerformed
         // TODO add your handling code here:
-        JOptionPane.showMessageDialog(rootPane,"'EOC' Empresa Organizadora de Concurso\n dispõe de diversas ferramentas de gerenciamento\n"
-            + "Para adequar-se ao uso da ferramenta oferecemos o treinamento necessário\n.Dúvidas ligue para fone:Telefone de Antônio ");
+        JOptionPane.showMessageDialog(rootPane, "'EOC' Empresa Organizadora de Concurso\n dispõe de diversas ferramentas de gerenciamento\n"
+                + "Para adequar-se ao uso da ferramenta oferecemos o treinamento necessário\n.Dúvidas ligue para fone:Telefone de Antônio ");
     }//GEN-LAST:event_jMenuItem21ActionPerformed
-    
+
+    private void ButtonCancelarFaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonCancelarFaseActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+
+    }//GEN-LAST:event_ButtonCancelarFaseActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -655,29 +645,22 @@ public class CRUDFase extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton ButtonLimparFase;
+    private javax.swing.JButton ButtonCancelarFase;
     private javax.swing.JButton ButtonSalvarFase;
     private javax.swing.JTable TableListarDiaFase;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu10;
     private javax.swing.JMenu jMenu11;
     private javax.swing.JMenu jMenu12;
     private javax.swing.JMenu jMenu13;
     private javax.swing.JMenu jMenu14;
     private javax.swing.JMenu jMenu15;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenu jMenu3;
-    private javax.swing.JMenu jMenu4;
     private javax.swing.JMenu jMenu5;
     private javax.swing.JMenu jMenu6;
     private javax.swing.JMenu jMenu7;
     private javax.swing.JMenu jMenu8;
     private javax.swing.JMenu jMenu9;
-    private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuBar jMenuBar2;
     private javax.swing.JMenuBar jMenuBar3;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem10;
@@ -694,8 +677,6 @@ public class CRUDFase extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem20;
     private javax.swing.JMenuItem jMenuItem21;
     private javax.swing.JMenuItem jMenuItem24;
-    private javax.swing.JMenuItem jMenuItem4;
-    private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JMenuItem jMenuItem8;

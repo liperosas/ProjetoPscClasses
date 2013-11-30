@@ -547,5 +547,10 @@ public class Fachada implements IFachada {
         return rnGabarito.consultarGabaritoProva(id_prova);
     }
 
+    @Override
+    public List<CartaoResposta> consultarCartoesRespostaConcursandoProva(Prova prova, Concursando concursando) throws Exception {
+        return rnConcursando.consultarCartoesRespostaConcursandoProva(prova, concursando);
+    }
+
    
 }

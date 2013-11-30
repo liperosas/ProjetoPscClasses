@@ -55,6 +55,8 @@ public interface IFachada {
 	Concursando logarConcrusando(String login, String senha) throws Exception;
 
 	List<Concursando> calcularNotaMultiplaConcursandos(Fase fase) throws Exception;
+        
+        List<CartaoResposta> consultarCartoesRespostaConcursandoProva(Prova prova, Concursando concursando) throws Exception;
 
 	void inserirProva(Prova prova) throws Exception;
 

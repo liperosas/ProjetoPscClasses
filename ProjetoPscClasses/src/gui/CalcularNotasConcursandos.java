@@ -5,14 +5,18 @@
 package gui;
 
 import classes.AreaConcurso;
+import classes.Concurso;
 import classes.Fase;
 import fachada.Fachada;
 import fachada.IFachada;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -24,19 +28,21 @@ public class CalcularNotasConcursandos extends javax.swing.JFrame {
      * Creates new form CalcularNotasConcursandos
      */
     List<AreaConcurso> areas;
+    List<Concurso> concursos;
     List<Fase> fases;
     IFachada fachada = Fachada.obterInstancia();
-
+    
     public CalcularNotasConcursandos() {
         initComponents();
         try {
-            areas = fachada.consultarTodosAreaConcurso();            
-            this.carregarComboAreasConcurso();
+            concursos = new ArrayList<Concurso>();
+            concursos = fachada.consultarTodosConcurso();            
+            this.carregarListaConcursos();            
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(rootPane, ex.getMessage());
         }
     }
-
+    
     public void carregarComboAreasConcurso() {
         DefaultComboBoxModel comboModel = new DefaultComboBoxModel();
         for (AreaConcurso areaConcurso : areas) {
@@ -49,9 +55,19 @@ public class CalcularNotasConcursandos extends javax.swing.JFrame {
         DefaultComboBoxModel comboModel = new DefaultComboBoxModel();
         fases = areas.get(ComboAreasConcurso.getSelectedIndex()).getFases();
         for (int i = 0; i < fases.size(); i++) {
-            comboModel.addElement((i +1) + "ª Fase");
-        }                     
+            comboModel.addElement((i + 1) + "ª Fase");
+        }        
         ComboFasesAreaConcurso.setModel(comboModel);
+    }
+    
+    public void carregarListaConcursos() {
+        DefaultTableModel modelo = new DefaultTableModel();
+        modelo.setColumnIdentifiers(new String[]{"Nome do Concurso", "Empresa Patrocinadora", "Data das Inscrições", "Data do Encerramento"});
+        for (Concurso concurso : concursos) {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            modelo.addRow(new Object[]{concurso.getNomeConcurso(), concurso.getEmpresa().getNome(), sdf.format(concurso.getDatainscricao().getTime()), sdf.format(concurso.getDatafinal().getTime())});
+        }
+        TableConcursos.setModel(modelo);
     }
 
     /**
@@ -65,9 +81,11 @@ public class CalcularNotasConcursandos extends javax.swing.JFrame {
 
         ComboAreasConcurso = new javax.swing.JComboBox();
         ComboFasesAreaConcurso = new javax.swing.JComboBox();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        ButtonCadastrarCartResp = new javax.swing.JButton();
+        ButtonIniciarCorrecao = new javax.swing.JButton();
+        ButtonVisualizarResultado = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        TableConcursos = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -77,44 +95,81 @@ public class CalcularNotasConcursandos extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setText("Cadastrar Cartoes Resposta");
+        ButtonCadastrarCartResp.setText("Cadastrar Cartoes Resposta");
+        ButtonCadastrarCartResp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ButtonCadastrarCartRespActionPerformed(evt);
+            }
+        });
 
-        jButton2.setText("Iniciar Correção");
+        ButtonIniciarCorrecao.setText("Iniciar Correção");
+        ButtonIniciarCorrecao.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ButtonIniciarCorrecaoActionPerformed(evt);
+            }
+        });
 
-        jButton3.setText("Visualizar Resultado");
+        ButtonVisualizarResultado.setText("Visualizar Resultado");
+        ButtonVisualizarResultado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ButtonVisualizarResultadoActionPerformed(evt);
+            }
+        });
+
+        TableConcursos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
+        TableConcursos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                TableConcursosMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(TableConcursos);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(27, 27, 27)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(ComboAreasConcurso, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(34, 34, 34)
-                        .addComponent(ComboFasesAreaConcurso, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton2)
+                        .addGap(27, 27, 27)
+                        .addComponent(ButtonCadastrarCartResp, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(38, 38, 38)
+                        .addComponent(ButtonIniciarCorrecao)
                         .addGap(26, 26, 26)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(ButtonVisualizarResultado, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 548, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(ComboAreasConcurso, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(34, 34, 34)
+                                .addComponent(ComboFasesAreaConcurso, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(ComboAreasConcurso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(ComboFasesAreaConcurso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(45, 45, 45)
+                .addGap(29, 29, 29)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3))
-                .addContainerGap(51, Short.MAX_VALUE))
+                    .addComponent(ButtonCadastrarCartResp)
+                    .addComponent(ButtonIniciarCorrecao)
+                    .addComponent(ButtonVisualizarResultado))
+                .addGap(22, 22, 22))
         );
 
         pack();
@@ -124,6 +179,33 @@ public class CalcularNotasConcursandos extends javax.swing.JFrame {
         // TODO add your handling code here:
         this.carregarComboFases();
     }//GEN-LAST:event_ComboAreasConcursoMouseClicked
+    
+    private void ButtonCadastrarCartRespActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonCadastrarCartRespActionPerformed
+        // TODO add your handling code here:
+        ListarConcursandosFase lcf = new ListarConcursandosFase(fases.get(ComboFasesAreaConcurso.getSelectedIndex()));
+        lcf.setVisible(true);
+    }//GEN-LAST:event_ButtonCadastrarCartRespActionPerformed
+    
+    private void TableConcursosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TableConcursosMouseClicked
+        // TODO add your handling code here:
+        if (TableConcursos.getSelectedRow() != -1) {
+            areas = concursos.get(TableConcursos.getSelectedRow()).getAreasConcurso();
+            carregarComboAreasConcurso();
+            carregarComboFases();
+        }
+    }//GEN-LAST:event_TableConcursosMouseClicked
+
+    private void ButtonIniciarCorrecaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonIniciarCorrecaoActionPerformed
+        // TODO add your handling code here:
+        CorrecaoProvasFase cpf = new CorrecaoProvasFase(fases.get(ComboFasesAreaConcurso.getSelectedIndex()));
+        cpf.setVisible(true);
+    }//GEN-LAST:event_ButtonIniciarCorrecaoActionPerformed
+
+    private void ButtonVisualizarResultadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonVisualizarResultadoActionPerformed
+        // TODO add your handling code here:
+        ListaClassificacao lcl = new ListaClassificacao(fases.get(ComboFasesAreaConcurso.getSelectedIndex()));
+        lcl.setVisible(true);
+    }//GEN-LAST:event_ButtonVisualizarResultadoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -160,10 +242,12 @@ public class CalcularNotasConcursandos extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton ButtonCadastrarCartResp;
+    private javax.swing.JButton ButtonIniciarCorrecao;
+    private javax.swing.JButton ButtonVisualizarResultado;
     private javax.swing.JComboBox ComboAreasConcurso;
     private javax.swing.JComboBox ComboFasesAreaConcurso;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JTable TableConcursos;
+    private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 }

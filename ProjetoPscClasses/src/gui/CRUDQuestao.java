@@ -50,9 +50,11 @@ public class CRUDQuestao extends javax.swing.JFrame {
             codElaboradores = new long[elaboradores.size()];
             int i = 0;
             for (Elaborador elaborador : elaboradores) {
+                if (elaborador.getStatus() != 0){
                 comboElaboradorQuestao.addItem(elaborador.getNome());
                 codElaboradores[i] = elaborador.getId();
                 i++;
+                }
             }
             radioDiscursiva.setSelected(true);
         } catch (Exception ex) {
@@ -428,7 +430,7 @@ public class CRUDQuestao extends javax.swing.JFrame {
 
         jMenu2.setText("Opcoes");
 
-        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_H, 0));
+        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_H, java.awt.event.InputEvent.CTRL_MASK));
         jMenuItem1.setText("Home");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -618,7 +620,9 @@ public class CRUDQuestao extends javax.swing.JFrame {
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, ex.getMessage());
             }
+            
         }
+        this.dispose();
     }//GEN-LAST:event_ButtonLimparQuestaoActionPerformed
 
     private void radioDiscursivaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioDiscursivaActionPerformed

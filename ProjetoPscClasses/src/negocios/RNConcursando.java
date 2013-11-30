@@ -1,9 +1,11 @@
 package negocios;
 
+import classes.CartaoResposta;
 import java.util.List;
 
 import classes.Concursando;
 import classes.Fase;
+import classes.Prova;
 import daoImpl.ConcursandoDAOImpl;
 import factory.FactoryDAO;
 
@@ -47,6 +49,10 @@ public class RNConcursando extends RNPessoa {
         return dao.calcularNotaMultiplaConcursandos(fase);
     }
 
+    public List<CartaoResposta> consultarCartoesRespostaConcursandoProva(Prova prova, Concursando concursando) throws Exception {
+        return dao.consultarCartoesRespostaConcursandoProva(prova, concursando);
+    }
+    
     public RNConcursando() {
         // TODO Auto-generated constructor stub
         dao = FactoryDAO.getCocursandoDAOImpl();

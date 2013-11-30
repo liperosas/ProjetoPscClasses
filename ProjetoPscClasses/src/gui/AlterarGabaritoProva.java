@@ -5,17 +5,21 @@
 package gui;
 
 import classes.Alternativa;
+import classes.CartaoResposta;
 import classes.Fase;
 import classes.Gabarito;
 import classes.Prova;
 import classes.Questao;
 import classes.QuestaoDiscursiva;
 import classes.QuestaoMultiplaEscolha;
+import classes.RespostasProva;
 import fachada.Fachada;
 import fachada.IFachada;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -31,13 +35,13 @@ public class AlterarGabaritoProva extends javax.swing.JFrame {
     Prova prova;
     List<QuestaoMultiplaEscolha> questoesMult;
     List<QuestaoDiscursiva> questoesDisc;
-    Gabarito gabarito;
+    RespostasProva respostasProva;
     IFachada fachada = Fachada.obterInstancia();
 
     public AlterarGabaritoProva(Prova prova, Gabarito gabarito) {
         initComponents();
         this.prova = prova;
-        this.gabarito = gabarito;
+        this.respostasProva = gabarito;
         questoesMult = new ArrayList<QuestaoMultiplaEscolha>();
         questoesDisc = new ArrayList<QuestaoDiscursiva>();
         gabarito.setProva(prova);
@@ -63,6 +67,41 @@ public class AlterarGabaritoProva extends javax.swing.JFrame {
         LabelDiaFase.setText("Dia :" + format.format(prova.getDiaFase().getDataDia().getTime()));
         this.carregarQuestoesMultipla();
         this.carregarQuestoesDiscursivas();
+    }
+
+    public AlterarGabaritoProva(Prova prova, CartaoResposta cartaoResposta) {
+        try {
+            initComponents();
+            this.prova = fachada.consultarProvaPorId(prova.getId());           
+            this.respostasProva = fachada.consultarCartaoRespostaPorId(cartaoResposta.getId());
+            questoesMult = new ArrayList<QuestaoMultiplaEscolha>();
+            questoesDisc = new ArrayList<QuestaoDiscursiva>();
+            respostasProva.setProva(prova);
+            for (Questao questao : prova.getQuestoes()) {
+                if (questao instanceof QuestaoMultiplaEscolha) {
+                    questoesMult.add((QuestaoMultiplaEscolha) questao);
+                } else {
+                    questoesDisc.add((QuestaoDiscursiva) questao);
+                }
+            }
+            LabelEmpresa.setText("Empresa: " + prova.getDiaFase().getFase().getAreaconcurso().getConcurso().getEmpresa().getNome());
+            LabelConcurso.setText("Concurso: " + prova.getDiaFase().getFase().getAreaconcurso().getConcurso().getNomeConcurso());
+            LabelAreaConcurso.setText("Area do Concurso: " + prova.getDiaFase().getFase().getAreaconcurso().getNome());
+            int numFase = 0;
+            for (Fase fase : prova.getDiaFase().getFase().getAreaconcurso().getFases()) {
+                numFase++;
+                if (fase.getId() == prova.getDiaFase().getFase().getId()) {
+                    break;
+                }
+            }
+            LabelFase.setText(numFase + "ª Fase");
+            SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+            LabelDiaFase.setText("Dia :" + format.format(prova.getDiaFase().getDataDia().getTime()));
+            this.carregarQuestoesMultipla();
+            this.carregarQuestoesDiscursivas();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(LabelEmpresa, ex.getMessage());
+        }
     }
 
     private AlterarGabaritoProva() {
@@ -101,7 +140,7 @@ public class AlterarGabaritoProva extends javax.swing.JFrame {
             modelo.setColumnIdentifiers(new String[]{"Alternativa", ""});
             for (Alternativa alternativa : questao.getAlternativas()) {
                 String x = "";
-                for (Alternativa a : gabarito.getAlternativas()) {
+                for (Alternativa a : respostasProva.getAlternativas()) {
                     if (a.getId() == alternativa.getId()) {
                         x = "X";
                     }
@@ -454,7 +493,7 @@ public class AlterarGabaritoProva extends javax.swing.JFrame {
 
         jMenu2.setText("Opcoes");
 
-        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_H, 0));
+        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_H, java.awt.event.InputEvent.CTRL_MASK));
         jMenuItem1.setText("Home");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -571,14 +610,14 @@ public class AlterarGabaritoProva extends javax.swing.JFrame {
         // TODO add your handling code here:
         if (TableQuestoesMultipla.getSelectedRow() != -1) {
             if (TableAlternativas.getSelectedRow() != -1) {
-                for (Alternativa alternativa : gabarito.getAlternativas()) {
+                for (Alternativa alternativa : respostasProva.getAlternativas()) {
                     if (alternativa.getQuestao().getId() == questoesMult.get(TableQuestoesMultipla.getSelectedRow()).getAlternativas().get(TableAlternativas.getSelectedRow()).getQuestao().getId()) {
-                        gabarito.getAlternativas().remove(alternativa);
+                        respostasProva.getAlternativas().remove(alternativa);
                         break;
                     }
 
                 }
-                gabarito.getAlternativas().add(questoesMult.get(TableQuestoesMultipla.getSelectedRow()).getAlternativas().get(TableAlternativas.getSelectedRow()));
+                respostasProva.getAlternativas().add(questoesMult.get(TableQuestoesMultipla.getSelectedRow()).getAlternativas().get(TableAlternativas.getSelectedRow()));
             }
             this.carregarAlternativas(questoesMult.get(TableQuestoesMultipla.getSelectedRow()));
         }
@@ -589,7 +628,7 @@ public class AlterarGabaritoProva extends javax.swing.JFrame {
             // TODO add your handling code here:
             int qntdQuestoes = 0;
             for (QuestaoMultiplaEscolha quest : questoesMult) {
-                for (Alternativa alternativaGabarito : gabarito.getAlternativas()) {
+                for (Alternativa alternativaGabarito : respostasProva.getAlternativas()) {
                     if (alternativaGabarito.getQuestao().getId() == quest.getId()) {
                         qntdQuestoes++;
                     }
@@ -598,9 +637,12 @@ public class AlterarGabaritoProva extends javax.swing.JFrame {
             if (qntdQuestoes < questoesMult.size()) {
                 JOptionPane.showMessageDialog(rootPane, "Existe uma ou mais questões que não foram respondidas.");
             } else {
-                fachada.atualizarGabarito(gabarito);
+                if (respostasProva instanceof Gabarito) {
+                    fachada.atualizarGabarito((Gabarito) respostasProva);
+                } else {
+                    fachada.atualizarCartaoResposta((CartaoResposta) respostasProva);
+                }
             }
-
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage());
         }
@@ -619,104 +661,104 @@ public class AlterarGabaritoProva extends javax.swing.JFrame {
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
         // TODO add your handling code here:
-        CRUDProva crudP= new CRUDProva();
+        CRUDProva crudP = new CRUDProva();
         crudP.setVisible(true);
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
         // TODO add your handling code here:
-        ListarProva ltsP= new ListarProva();
+        ListarProva ltsP = new ListarProva();
         ltsP.setVisible(true);
     }//GEN-LAST:event_jMenuItem5ActionPerformed
 
     private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
         // TODO add your handling code here:
-        CRUDConcurso crudC= new CRUDConcurso(null);
+        CRUDConcurso crudC = new CRUDConcurso(null);
         crudC.setVisible(true);
     }//GEN-LAST:event_jMenuItem6ActionPerformed
 
     private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
         // TODO add your handling code here:
-        ListarConcurso lstC= new ListarConcurso();
+        ListarConcurso lstC = new ListarConcurso();
         lstC.setVisible(true);
     }//GEN-LAST:event_jMenuItem7ActionPerformed
 
     private void jMenuItem9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem9ActionPerformed
         // TODO add your handling code here:
-        CRUDQuestao crudQ= new CRUDQuestao(null);
+        CRUDQuestao crudQ = new CRUDQuestao(null);
         crudQ.setVisible(true);
     }//GEN-LAST:event_jMenuItem9ActionPerformed
 
     private void jMenuItem24ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem24ActionPerformed
         // TODO add your handling code here:
-        ListarQuestao listarq= new ListarQuestao();
+        ListarQuestao listarq = new ListarQuestao();
         listarq.setVisible(true);
     }//GEN-LAST:event_jMenuItem24ActionPerformed
 
     private void jMenuItem10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem10ActionPerformed
         // TODO add your handling code here:
-        CRUDGenero crudG= new CRUDGenero(null);
+        CRUDGenero crudG = new CRUDGenero(null);
         crudG.setVisible(true);
     }//GEN-LAST:event_jMenuItem10ActionPerformed
 
     private void jMenuItem11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem11ActionPerformed
         // TODO add your handling code here:
-        ListarGenero lstG= new ListarGenero();
+        ListarGenero lstG = new ListarGenero();
         lstG.setVisible(true);
     }//GEN-LAST:event_jMenuItem11ActionPerformed
 
     private void jMenuItem12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem12ActionPerformed
         // TODO add your handling code here:
-        CRUDLocal crudL= new CRUDLocal(null);
+        CRUDLocal crudL = new CRUDLocal(null);
         crudL.setVisible(true);
     }//GEN-LAST:event_jMenuItem12ActionPerformed
 
     private void jMenuItem13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem13ActionPerformed
         // TODO add your handling code here:
-        ListarLocal lst= new ListarLocal();
+        ListarLocal lst = new ListarLocal();
         lst.setVisible(true);
     }//GEN-LAST:event_jMenuItem13ActionPerformed
 
     private void jMenuItem14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem14ActionPerformed
         // TODO add your handling code here:
-        CRUDEmpresa crudE= new CRUDEmpresa(null);
+        CRUDEmpresa crudE = new CRUDEmpresa(null);
         crudE.setVisible(true);
     }//GEN-LAST:event_jMenuItem14ActionPerformed
 
     private void jMenuItem15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem15ActionPerformed
         // TODO add your handling code here:
-        ListarEmpresa lstE= new ListarEmpresa();
+        ListarEmpresa lstE = new ListarEmpresa();
         lstE.setVisible(true);
     }//GEN-LAST:event_jMenuItem15ActionPerformed
 
     private void jMenuItem16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem16ActionPerformed
         // TODO add your handling code here:
-        CRUDElaborador el= new CRUDElaborador(null);
+        CRUDElaborador el = new CRUDElaborador(null);
         el.setVisible(true);
     }//GEN-LAST:event_jMenuItem16ActionPerformed
 
     private void jMenuItem17ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem17ActionPerformed
         // TODO add your handling code here:
-        ListarElaborador lstEl= new ListarElaborador();
+        ListarElaborador lstEl = new ListarElaborador();
         lstEl.setVisible(true);
 
     }//GEN-LAST:event_jMenuItem17ActionPerformed
 
     private void jMenuItem18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem18ActionPerformed
         // TODO add your handling code here:
-        CRUDFuncionario crudF= new CRUDFuncionario(null);
+        CRUDFuncionario crudF = new CRUDFuncionario(null);
         crudF.setVisible(true);
     }//GEN-LAST:event_jMenuItem18ActionPerformed
 
     private void jMenuItem19ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem19ActionPerformed
         // TODO add your handling code here:
-        ListarFuncionario lstF= new ListarFuncionario();
+        ListarFuncionario lstF = new ListarFuncionario();
         lstF.setVisible(true);
     }//GEN-LAST:event_jMenuItem19ActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         // TODO add your handling code here:
-        TelaInicial tl= new TelaInicial();
+        TelaInicial tl = new TelaInicial();
         tl.setVisible(true);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
@@ -727,8 +769,8 @@ public class AlterarGabaritoProva extends javax.swing.JFrame {
 
     private void jMenuItem20ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem20ActionPerformed
         // TODO add your handling code here:
-        JOptionPane.showMessageDialog(rootPane,"'EOC' Empresa Organizadora de Concurso\n dispõe de diversas ferramentas de gerenciamento\n"
-            + "Para adequar-se ao uso da ferramenta oferecemos o treinamento necessário\n.Dúvidas ligue para fone:Telefone de Antônio ");
+        JOptionPane.showMessageDialog(rootPane, "'EOC' Empresa Organizadora de Concurso\n dispõe de diversas ferramentas de gerenciamento\n"
+                + "Para adequar-se ao uso da ferramenta oferecemos o treinamento necessário\n.Dúvidas ligue para fone:Telefone de Antônio ");
     }//GEN-LAST:event_jMenuItem20ActionPerformed
 
     /**

@@ -31,14 +31,15 @@ public class CRUDConcurso extends javax.swing.JFrame {
     Fachada fachada = Fachada.obterInstancia();
     long[] codEmpresa;
     Concurso concurso = new Concurso();
-    AreaConcurso areaConcurso= new AreaConcurso();
+    AreaConcurso areaConcurso = new AreaConcurso();
     ArrayList<AreaConcurso> areaConcursos = new ArrayList<AreaConcurso>();
     DefaultTableModel modelo = new DefaultTableModel();
     ListarConcurso lC;
+
     public CRUDConcurso(ListarConcurso lC) {
         initComponents();
-        this.lC=lC;
-        
+        this.lC = lC;
+
         this.carregarListaAreaConcurso();
         try {
             List<Empresa> empresas = new ArrayList<Empresa>();
@@ -50,7 +51,7 @@ public class CRUDConcurso extends javax.swing.JFrame {
                 codEmpresa[i] = empresa.getId();
                 i++;
             }
-         
+
             this.setLocation(250, 100);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(rootPane, ex.getMessage());
@@ -60,16 +61,12 @@ public class CRUDConcurso extends javax.swing.JFrame {
     private CRUDConcurso() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
-    
-
-    
 
 //    private CRUDConcurso() {
 //        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 //   }
     public void carregarListaAreaConcurso() {
-         AreaConcurso areaConcurso= new AreaConcurso();
+        AreaConcurso areaConcurso = new AreaConcurso();
         try {
             modelo = new DefaultTableModel();
             modelo.setColumnIdentifiers(new Object[]{"NomeArea", "NomeConcurso", "Vagas"});
@@ -83,8 +80,8 @@ public class CRUDConcurso extends javax.swing.JFrame {
         }
 
 
-        }
-  
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -401,7 +398,7 @@ public class CRUDConcurso extends javax.swing.JFrame {
 
         jMenu2.setText("Opcoes");
 
-        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_H, 0));
+        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_H, java.awt.event.InputEvent.CTRL_MASK));
         jMenuItem1.setText("Home");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -547,48 +544,32 @@ public class CRUDConcurso extends javax.swing.JFrame {
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
 
-        if(TableListarAreaConcurso.getSelectedRow()!=-1){
+        if (TableListarAreaConcurso.getSelectedRow() != -1) {
             areaConcursos.remove(TableListarAreaConcurso.getSelectedRow());
             this.carregarListaAreaConcurso();
-          JOptionPane.showMessageDialog(rootPane, "Area do Concurso removida com sucesso");
-        } else{
-        JOptionPane.showMessageDialog(rootPane,"Selecione Area do concurso para remover");
-        }                 
-          
+            JOptionPane.showMessageDialog(rootPane, "Area do Concurso removida com sucesso");
+        } else {
+            JOptionPane.showMessageDialog(rootPane, "Selecione Area do concurso para remover");
+        }
+
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-         if(TableListarAreaConcurso.getSelectedRow()==-1){
-         JOptionPane.showMessageDialog(rootPane,"Selecione Area do concurso para alterar");
-         }else{}
-        // TODO add your handling code here:
-//        AlterarAreaConcurso altAC = new AlterarAreaConcurso(null, null);
-//        altAC.setVisible(true);
-//         AreaConcurso areaConcurso= new AreaConcurso();
-//        try {
-//            int codigo = TableListarAreaConcurso.getSelectedRow();
-//            long num_Concurso= concurso.getId();
-//            areaConcurso = fachada.consultarAreaConcursoPorId(Long.parseLong(TableListarAreaConcurso.getValueAt(codigo, 0).toString()));
-//            AlterarAreaConcurso altAC = new AlterarAreaConcurso(areaConcurso, null);
-//                
-//           altAC.setVisible(true);
-//            this.carregarListaAreaConcurso();
-//        } catch (Exception ex) {
-//            JOptionPane.showMessageDialog(rootPane, ex.getMessage());
-//
-//    }
-           AreaConcurso areaConcurso= new AreaConcurso();
-        try {
-            int codigo = TableListarAreaConcurso.getSelectedRow();
-            areaConcurso = fachada.consultarAreaConcursoPorId(Long.parseLong(TableListarAreaConcurso.getValueAt(codigo, 0).toString()));
-            AlterarAreaConcurso altAC = new AlterarAreaConcurso(areaConcurso,this);
-                
-           altAC.setVisible(true);
-            this.carregarListaAreaConcurso();
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(rootPane, ex.getMessage());
 
-    }
+        if (TableListarAreaConcurso.getSelectedRow() == -1) {
+            JOptionPane.showMessageDialog(rootPane, "Selecione Area do concurso para alterar");
+        } else {
+            AreaConcurso areaConcurso = new AreaConcurso();
+            try {
+                int codigo = TableListarAreaConcurso.getSelectedRow();                
+                CRUDAreaConcurso altAC = new CRUDAreaConcurso(areaConcursos.get(TableListarAreaConcurso.getSelectedRow()), this , TableListarAreaConcurso.getSelectedRow());
+                altAC.setVisible(true);
+                this.carregarListaAreaConcurso();
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(rootPane, ex.getMessage());
+
+            }
+        }
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
@@ -612,98 +593,98 @@ public class CRUDConcurso extends javax.swing.JFrame {
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
         // TODO add your handling code here:
-        CRUDProva crudP= new CRUDProva();
+        CRUDProva crudP = new CRUDProva();
         crudP.setVisible(true);
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
         // TODO add your handling code here:
-        ListarProva ltsP= new ListarProva();
+        ListarProva ltsP = new ListarProva();
         ltsP.setVisible(true);
     }//GEN-LAST:event_jMenuItem5ActionPerformed
 
     private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
         // TODO add your handling code here:
-        ListarConcurso lstC= new ListarConcurso();
+        ListarConcurso lstC = new ListarConcurso();
         lstC.setVisible(true);
     }//GEN-LAST:event_jMenuItem7ActionPerformed
 
     private void jMenuItem9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem9ActionPerformed
         // TODO add your handling code here:
-        CRUDQuestao crudQ= new CRUDQuestao(null);
+        CRUDQuestao crudQ = new CRUDQuestao(null);
         crudQ.setVisible(true);
     }//GEN-LAST:event_jMenuItem9ActionPerformed
 
     private void jMenuItem24ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem24ActionPerformed
         // TODO add your handling code here:
-        ListarQuestao listarq= new ListarQuestao();
+        ListarQuestao listarq = new ListarQuestao();
         listarq.setVisible(true);
     }//GEN-LAST:event_jMenuItem24ActionPerformed
 
     private void jMenuItem10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem10ActionPerformed
         // TODO add your handling code here:
-        CRUDGenero crudG= new CRUDGenero(null);
+        CRUDGenero crudG = new CRUDGenero(null);
         crudG.setVisible(true);
     }//GEN-LAST:event_jMenuItem10ActionPerformed
 
     private void jMenuItem11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem11ActionPerformed
         // TODO add your handling code here:
-        ListarGenero lstG= new ListarGenero();
+        ListarGenero lstG = new ListarGenero();
         lstG.setVisible(true);
     }//GEN-LAST:event_jMenuItem11ActionPerformed
 
     private void jMenuItem12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem12ActionPerformed
         // TODO add your handling code here:
-        CRUDLocal crudL= new CRUDLocal(null);
+        CRUDLocal crudL = new CRUDLocal(null);
         crudL.setVisible(true);
     }//GEN-LAST:event_jMenuItem12ActionPerformed
 
     private void jMenuItem13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem13ActionPerformed
         // TODO add your handling code here:
-        ListarLocal lst= new ListarLocal();
+        ListarLocal lst = new ListarLocal();
         lst.setVisible(true);
     }//GEN-LAST:event_jMenuItem13ActionPerformed
 
     private void jMenuItem14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem14ActionPerformed
         // TODO add your handling code here:
-        CRUDEmpresa crudE= new CRUDEmpresa(null);
+        CRUDEmpresa crudE = new CRUDEmpresa(null);
         crudE.setVisible(true);
     }//GEN-LAST:event_jMenuItem14ActionPerformed
 
     private void jMenuItem15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem15ActionPerformed
         // TODO add your handling code here:
-        ListarEmpresa lstE= new ListarEmpresa();
+        ListarEmpresa lstE = new ListarEmpresa();
         lstE.setVisible(true);
     }//GEN-LAST:event_jMenuItem15ActionPerformed
 
     private void jMenuItem16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem16ActionPerformed
         // TODO add your handling code here:
-        CRUDElaborador el= new CRUDElaborador(null);
+        CRUDElaborador el = new CRUDElaborador(null);
         el.setVisible(true);
     }//GEN-LAST:event_jMenuItem16ActionPerformed
 
     private void jMenuItem17ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem17ActionPerformed
         // TODO add your handling code here:
-        ListarElaborador lstEl= new ListarElaborador();
+        ListarElaborador lstEl = new ListarElaborador();
         lstEl.setVisible(true);
 
     }//GEN-LAST:event_jMenuItem17ActionPerformed
 
     private void jMenuItem18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem18ActionPerformed
         // TODO add your handling code here:
-        CRUDFuncionario crudF= new CRUDFuncionario(null);
+        CRUDFuncionario crudF = new CRUDFuncionario(null);
         crudF.setVisible(true);
     }//GEN-LAST:event_jMenuItem18ActionPerformed
 
     private void jMenuItem19ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem19ActionPerformed
         // TODO add your handling code here:
-        ListarFuncionario lstF= new ListarFuncionario();
+        ListarFuncionario lstF = new ListarFuncionario();
         lstF.setVisible(true);
     }//GEN-LAST:event_jMenuItem19ActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         // TODO add your handling code here:
-        TelaInicial tl= new TelaInicial();
+        TelaInicial tl = new TelaInicial();
         tl.setVisible(true);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
@@ -714,8 +695,8 @@ public class CRUDConcurso extends javax.swing.JFrame {
 
     private void jMenuItem20ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem20ActionPerformed
         // TODO add your handling code here:
-        JOptionPane.showMessageDialog(rootPane,"'EOC' Empresa Organizadora de Concurso\n dispõe de diversas ferramentas de gerenciamento\n"
-            + "Para adequar-se ao uso da ferramenta oferecemos o treinamento necessário\n.Dúvidas ligue para fone:Telefone de Antônio ");
+        JOptionPane.showMessageDialog(rootPane, "'EOC' Empresa Organizadora de Concurso\n dispõe de diversas ferramentas de gerenciamento\n"
+                + "Para adequar-se ao uso da ferramenta oferecemos o treinamento necessário\n.Dúvidas ligue para fone:Telefone de Antônio ");
     }//GEN-LAST:event_jMenuItem20ActionPerformed
 
     /**

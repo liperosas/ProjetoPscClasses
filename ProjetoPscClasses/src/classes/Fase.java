@@ -27,10 +27,15 @@ public class Fase {
     @Cascade(CascadeType.SAVE_UPDATE)
     private AreaConcurso areaconcurso;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Local local;
+    
     @OneToMany(mappedBy = "fase")
     @Cascade(CascadeType.ALL)
     private List<DiaFase> diasFase;
 
+    private boolean classificacaoRealizada;
+    
     public Fase(int id, AreaConcurso areaconcurso, Calendar datainicial,
             Calendar datafinal) {
         super();
@@ -58,6 +63,7 @@ public class Fase {
        // TODO Auto-generated constructor stub
         this.diasFase = new ArrayList<DiaFase>();
         this.areaconcurso = new AreaConcurso();
+        this.local = new Local();
     }
 
     public List<DiaFase> getDiasFase() {
@@ -66,6 +72,20 @@ public class Fase {
 
     public void setDiasFase(List<DiaFase> diasFase) {
         this.diasFase = diasFase;
+    }
+
+    /**
+     * @return the classificacaoRealizada
+     */
+    public boolean isClassificacaoRealizada() {
+        return classificacaoRealizada;
+    }
+
+    /**
+     * @param classificacaoRealizada the classificacaoRealizada to set
+     */
+    public void setClassificacaoRealizada(boolean classificacaoRealizada) {
+        this.classificacaoRealizada = classificacaoRealizada;
     }
 
 }
