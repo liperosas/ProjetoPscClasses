@@ -8,11 +8,13 @@ import classes.AreaConcurso;
 import classes.DiaFase;
 import classes.Elaborador;
 import classes.Fase;
+import classes.Local;
 import fachada.Fachada;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -34,11 +36,27 @@ public class CRUDFase extends javax.swing.JFrame {
     ArrayList<DiaFase> dias_fase = new ArrayList<DiaFase>();
     boolean alterar = false;
     int posicao = 0;
+    long[]codLocal;
 
     public CRUDFase(CRUDAreaConcurso crudac) {
         initComponents();
         this.crudac = crudac;
         this.atualizarListaDiaFase();
+        try {
+            List<Local> locais = new ArrayList<Local>();
+            locais = fachada.consultarTodosLocal();
+            int i = 0;
+            codLocal = new long[locais.size()];
+            for (Local local : locais) {
+                comboLocalFase.addItem(local.getNome());
+                codLocal[i] = local.getId();
+                i++;
+            }
+
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(rootPane, ex.getMessage());
+        }
     }
 
     public CRUDFase(CRUDAreaConcurso crudac, Fase fase, int posicao) {
@@ -80,6 +98,8 @@ public class CRUDFase extends javax.swing.JFrame {
         TableListarDiaFase = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        comboLocalFase = new javax.swing.JComboBox();
         jMenuBar3 = new javax.swing.JMenuBar();
         jMenu5 = new javax.swing.JMenu();
         jMenu6 = new javax.swing.JMenu();
@@ -157,6 +177,8 @@ public class CRUDFase extends javax.swing.JFrame {
                 jButton2ActionPerformed(evt);
             }
         });
+
+        jLabel3.setText("Local");
 
         jMenu5.setText("Menu");
 
@@ -397,17 +419,21 @@ public class CRUDFase extends javax.swing.JFrame {
                         .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
                         .addGap(10, 10, 10)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(ButtonCancelarFase)
-                                .addGap(27, 27, 27)
-                                .addComponent(ButtonSalvarFase)
-                                .addGap(144, 144, 144))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jButton1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 141, Short.MAX_VALUE)
-                                .addComponent(jButton2)
-                                .addGap(21, 21, 21))))))
+                        .addComponent(jButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 153, Short.MAX_VALUE)
+                        .addComponent(jButton2)
+                        .addGap(21, 21, 21))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addGap(18, 18, 18)
+                        .addComponent(comboLocalFase, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(ButtonCancelarFase)
+                .addGap(27, 27, 27)
+                .addComponent(ButtonSalvarFase)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -420,9 +446,13 @@ public class CRUDFase extends javax.swing.JFrame {
                     .addComponent(jButton2))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(comboLocalFase, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(ButtonCancelarFase)
                     .addComponent(ButtonSalvarFase))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
@@ -442,17 +472,21 @@ public class CRUDFase extends javax.swing.JFrame {
                     df.setFase(fase);
                 }
                 crudac.fases.get(posicao).setDiasFase(fase.getDiasFase());
-                crudac.carregarListaFases();
+                crudac.fases.get(posicao).getLocal().setId((codLocal[comboLocalFase.getSelectedIndex()]));
+                crudac.carregarListaFases();                
                 JOptionPane.showMessageDialog(this, "Fase Alterada com sucesso");
             } else {
                 for (DiaFase df : fase.getDiasFase()) {
                     df.setFase(fase);
                 }
+                fase.getLocal().setId(codLocal[comboLocalFase.getSelectedIndex()]);
                 crudac.fases.add(fase);
                 crudac.carregarListaFases();
                 JOptionPane.showMessageDialog(this, "Fase Cadastrada com sucesso");
             }
-                this.dispose();            
+            
+                    
+            this.dispose();            
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage());
         }
@@ -648,8 +682,10 @@ public class CRUDFase extends javax.swing.JFrame {
     private javax.swing.JButton ButtonCancelarFase;
     private javax.swing.JButton ButtonSalvarFase;
     private javax.swing.JTable TableListarDiaFase;
+    private javax.swing.JComboBox comboLocalFase;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JMenu jMenu10;
     private javax.swing.JMenu jMenu11;
     private javax.swing.JMenu jMenu12;

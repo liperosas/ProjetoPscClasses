@@ -88,4 +88,18 @@ public class Fase {
         this.classificacaoRealizada = classificacaoRealizada;
     }
 
+    /**
+     * @return the local
+     */
+    public Local getLocal() {
+        return local;
+    }
+
+    /**
+     * @param local the local to set
+     */
+    public void setLocal(Local local) {
+        this.local = local;
+    }
+
 }

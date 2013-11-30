@@ -88,4 +88,18 @@ public class Local {
     public void setNome(String nome) {
         this.nome = nome;
     }
+
+    /**
+     * @return the fases
+     */
+    public List<Fase> getFases() {
+        return fases;
+    }
+
+    /**
+     * @param fases the fases to set
+     */
+    public void setFases(List<Fase> fases) {
+        this.fases = fases;
+    }
 }
