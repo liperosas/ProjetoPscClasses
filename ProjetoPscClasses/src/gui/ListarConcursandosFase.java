@@ -94,6 +94,7 @@ public class ListarConcursandosFase extends javax.swing.JFrame {
         jButton1.setText("jButton1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setResizable(false);
 
         TableConcursandosFase.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {

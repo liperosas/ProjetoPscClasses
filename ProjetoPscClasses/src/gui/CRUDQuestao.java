@@ -9,7 +9,6 @@ import classes.Elaborador;
 import classes.Genero;
 import classes.QuestaoDiscursiva;
 import classes.QuestaoMultiplaEscolha;
-import com.sun.org.apache.bcel.internal.generic.BREAKPOINT;
 import fachada.Fachada;
 import java.util.ArrayList;
 import java.util.List;
@@ -149,6 +148,7 @@ public class CRUDQuestao extends javax.swing.JFrame {
         jMenuItem20 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
